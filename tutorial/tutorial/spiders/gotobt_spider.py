@@ -17,9 +17,10 @@ class RecruitSpider(scrapy.spiders.Spider):
       for sel in response.xpath('//a[@target="_blank" and @href]'):
         name = sel.xpath('./text()').extract()[0]
         detailLink = sel.xpath('./@href').extract()[0]
+        detail_url = "http://gotobt.com" + detailLink
+
         item = {} #RecruitItem()
         item['name']= name
-        detail_url = "http://gotobt.com" + detailLink
         item['detail_url']= detail_url
         yield scrapy.Request(url=detail_url,callback=self.parse_detail,meta={'item':item})
 

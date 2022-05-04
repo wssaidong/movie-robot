@@ -18,9 +18,10 @@ class RecruitSpider(scrapy.spiders.Spider):
       for sel in response.xpath('//*[@class="ulink"]'):
         name = sel.xpath('./text()').extract()[0]
         detailLink = sel.xpath('./@href').extract()[0]
+        detail_url = "https://www.ygdy8.net/" + detailLink
+
         item = {} #RecruitItem()
         item['name']= name
-        detail_url = "https://www.ygdy8.net/" + detailLink
         item['detail_url']= detail_url
         yield scrapy.Request(url=detail_url,callback=self.parse_detail,meta={'item':item})
 
