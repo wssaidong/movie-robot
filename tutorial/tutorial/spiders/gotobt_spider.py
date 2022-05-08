@@ -1,4 +1,7 @@
 import scrapy
+from kafka import KafkaProducer
+import json
+
 #from tutorial.items import RecruitItem
 
 class RecruitSpider(scrapy.spiders.Spider):
@@ -11,6 +14,9 @@ class RecruitSpider(scrapy.spiders.Spider):
         item = response.meta['item']
         magnet = response.xpath('//a[@target="_blank" and @href]')[1].xpath('./@href').extract()[0]
         item['magnet'] = magnet
+        
+        producer = KafkaProducer(bootstrap_servers=["192.168.3.90:9092"])
+        producer.send("log-movie", bytes(json.dumps(item,ensure_ascii=False), encoding='utf-8'))
         yield item
 
     def parse(self, response):
